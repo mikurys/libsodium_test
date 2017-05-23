@@ -45,40 +45,51 @@ size_t encrypt(unsigned char *ciphertext, unsigned char *buff, size_t size, size
 
 int main(int argc, char **argv)
 {
-	size_t iterations = 1;
-	if (argc == 3)
+	size_t min_size = 1024;
+	size_t quality = 4;
+	if (argc == 4)
 	{
-		iterations = atoi(argv[1]);
-		program_option = std::string(argv[2]);
+		min_size = atoi(argv[1]);
+		quality = atoi(argv[2]);
+		program_option = std::string(argv[3]);
 	}
+
+	if(program_option == encrytp_auth)
+		std::cout << "Encrypt+Authorize, without allocations, Mega bit/sec, MIN_SIZE=" << min_size << ", QUALITY=" << quality << std::endl;
+	else if(program_option == auth)
+		std::cout << "Authorize, without allocations, Mega bit/sec, MIN_SIZE=" << min_size << ", QUALITY=" << quality << std::endl;
 
 	if (sodium_init() == -1) {
 		return 1;
 	}
 
 	init();
-	for (size_t size=10; size<=SIZE; size+=10)
+	size_t size=16;
+	double dbl_size=static_cast<double>(size), multipler = std::pow(2, 1.0/quality);
+	for ( ; size<=SIZE; size=std::round(dbl_size))
 	{
-		if(size > 2000 && size%500 != 0) continue;
-		else if(size > 9000 && size%1000 != 0) continue;
-		else if(size > 100000 && size%100000 != 0) continue;
-		else if(size > 1000000 && size%1000000 != 0) continue;
-		else if(size > 10000000 && size%10000000 != 0) continue;
+	//	if(size > 2000 && size%500 != 0) continue;
+	//	else if(size > 9000 && size%1000 != 0) continue;
+	//	else if(size > 100000 && size%100000 != 0) continue;
+	//	else if(size > 1000000 && size%1000000 != 0) continue;
+	//	else if(size > 10000000 && size%10000000 != 0) continue;
 		//unsigned char *buff = new unsigned char[size];
 		//randombytes_buf(buff, size);
-		for (size_t sizeB=1; sizeB<=size; sizeB++)
+		size_t sizeB=8;
+		double dbl_sizeB=static_cast<double>(sizeB);
+		for (; sizeB<=size; sizeB=std::round(dbl_sizeB))
 		{
-			if(sizeB > 256 && sizeB%16 != 0) continue;
-			else if(sizeB > 2048 && sizeB%128 != 0) continue;
-			else if(sizeB > 16*1024 && sizeB%2048 != 0) continue;
-			else if(sizeB > 256*1024 && sizeB%(256*1024) != 0) continue;
-			else if(sizeB > 2*1024*1024 && sizeB%(2*1024*1024) != 0) continue;
-			else if(sizeB > 32*1024*1024 && sizeB%(32*1024*1024) != 0) continue;
-			else if(sizeB > 512*1024*1024 && sizeB%(512*1024*1024) != 0) continue;
+		//	if(sizeB > 256 && sizeB%16 != 0) continue;
+		//	else if(sizeB > 2048 && sizeB%128 != 0) continue;
+		//	else if(sizeB > 16*1024 && sizeB%2048 != 0) continue;
+		//	else if(sizeB > 256*1024 && sizeB%(256*1024) != 0) continue;
+		//	else if(sizeB > 2*1024*1024 && sizeB%(2*1024*1024) != 0) continue;
+		//	else if(sizeB > 32*1024*1024 && sizeB%(32*1024*1024) != 0) continue;
+		//	else if(sizeB > 512*1024*1024 && sizeB%(512*1024*1024) != 0) continue;
 
 			size_t true_size;
 			auto start_time = Time::now();
-			size_t iter = iterations*(std::ceil(static_cast<double>(SIZE)/(size*5000)));
+			size_t iter = std::ceil(static_cast<double>(min_size)/(size));
 			for (size_t i=0; i<iter; i++)
 			{
 			  	true_size = encrypt(ciphertext, buff, size, sizeB);
@@ -92,9 +103,11 @@ int main(int argc, char **argv)
 			std::cout << size << " " << sizeB << " " << (static_cast<double>(size)*1000*1000*1000)/(static_cast<double>(n.count())*1024*1024)*8*iter	<< std::endl;
 
 			//std::cerr << std::endl << "iter=" << iter << " size=" << size << " SIZE=" << SIZE << " n.count=" << n.count() << std::endl;
+			dbl_sizeB*=multipler;
 		}
 		std::cout << std::endl;
 		std::cerr << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b" << size << '/' << SIZE;
+		dbl_size*=multipler;
 	}
 	delete[] buff;
 	delete[] ciphertext;
