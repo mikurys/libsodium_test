@@ -8,4 +8,4 @@ set xrange [32:]
 set yrange [32:]
 set ylabel 'Size of chunk to process at a time (e.g. bag)'
 set palette defined(0.0 "black", 0.1 "blue", 0.2 "red", 0.4 "yellow", 0.6 "green", 0.8 "#008800")
-splot 'result.txt' u 1:2:3 w pm3d title "Crypto speed in MB/s"
+splot 'result.txt' u 1:2:3 w pm3d title "Crypto speed in Mb/s"

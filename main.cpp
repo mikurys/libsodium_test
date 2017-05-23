@@ -11,6 +11,10 @@ typedef std::chrono::milliseconds ms;
 typedef std::chrono::nanoseconds ns;
 typedef std::chrono::duration<double> fsec;
 
+std::string program_option("--encrypt-auth");
+std::string encrytp_auth("--encrypt-auth");
+std::string auth("--auth");
+
 unsigned char nonce[crypto_secretbox_NONCEBYTES];
 unsigned char key[crypto_secretbox_KEYBYTES];
 unsigned char *buff = new unsigned char[SIZE];
@@ -29,7 +33,10 @@ size_t encrypt(unsigned char *ciphertext, unsigned char *buff, size_t size, size
 	unsigned char *ciphertext_ptr = ciphertext;
 	while(buff_ptr+sizeB <= buff+size)
 	{
-		crypto_secretbox_easy(ciphertext_ptr, buff_ptr, sizeB, nonce, key);
+		if(program_option == encrytp_auth)
+			crypto_secretbox_easy(ciphertext_ptr, buff_ptr, sizeB, nonce, key);
+		else if(program_option == auth)
+			crypto_onetimeauth(ciphertext+sizeB, buff_ptr, sizeB, key);
 		buff_ptr += sizeB;
 		ciphertext_ptr += sizeB + crypto_secretbox_MACBYTES;
 	}
@@ -39,8 +46,12 @@ size_t encrypt(unsigned char *ciphertext, unsigned char *buff, size_t size, size
 int main(int argc, char **argv)
 {
 	size_t iterations = 1;
-	if (argc == 2)
+	if (argc == 3)
+	{
 		iterations = atoi(argv[1]);
+		program_option = std::string(argv[2]);
+	}
+
 	if (sodium_init() == -1) {
 		return 1;
 	}
