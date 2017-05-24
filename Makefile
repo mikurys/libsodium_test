@@ -1,4 +1,4 @@
-PROGRAM_OPTION=--auth #posibilities: --auth, --encrypt-auth
+PROGRAM_OPTION=--encrypt-auth #posibilities: --auth, --encrypt-auth
 MIN_SIZE=1024 #minimum data to calculate avg crypto speed, default value 1024 (increase to get better data)
 QUALITY=16 #chart quality, default value 4 (increase to get better chart)
 all:
