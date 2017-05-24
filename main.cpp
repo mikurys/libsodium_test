@@ -18,6 +18,7 @@ std::string auth("--auth");
 unsigned char nonce[crypto_secretbox_NONCEBYTES];
 unsigned char key[crypto_secretbox_KEYBYTES];
 unsigned char *buff = new unsigned char[SIZE];
+unsigned char *copy_buff = new unsigned char[SIZE];
 unsigned char *ciphertext = new unsigned char[ciphertext_len];
 
 void init(){
@@ -33,10 +34,11 @@ size_t encrypt(unsigned char *ciphertext, unsigned char *buff, size_t size, size
 	unsigned char *ciphertext_ptr = ciphertext;
 	while(buff_ptr+sizeB <= buff+size)
 	{
+		std::copy(buff_ptr, buff_ptr+sizeB, copy_buff);
 		if(program_option == encrytp_auth)
-			crypto_secretbox_easy(ciphertext_ptr, buff_ptr, sizeB, nonce, key);
+			crypto_secretbox_easy(ciphertext_ptr, copy_buff, sizeB, nonce, key);
 		else if(program_option == auth)
-			crypto_onetimeauth(ciphertext+sizeB, buff_ptr, sizeB, key);
+			crypto_onetimeauth(ciphertext+sizeB, copy_buff, sizeB, key);
 		buff_ptr += sizeB;
 		ciphertext_ptr += sizeB + crypto_secretbox_MACBYTES;
 	}
@@ -55,9 +57,9 @@ int main(int argc, char **argv)
 	}
 
 	if(program_option == encrytp_auth)
-		std::cout << "Encrypt+Authorize, without allocations, Mega bit/sec, MIN_SIZE=" << min_size << ", QUALITY=" << quality << std::endl;
+		std::cout << "Encrypt+Authorize, without buffer copy, Mega bit/sec, MIN_SIZE=" << min_size << ", QUALITY=" << quality << std::endl;
 	else if(program_option == auth)
-		std::cout << "Authorize, without allocations, Mega bit/sec, MIN_SIZE=" << min_size << ", QUALITY=" << quality << std::endl;
+		std::cout << "Authorize, without buffer copy, Mega bit/sec, MIN_SIZE=" << min_size << ", QUALITY=" << quality << std::endl;
 
 	if (sodium_init() == -1) {
 		return 1;
