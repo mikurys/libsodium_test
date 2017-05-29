@@ -1,15 +1,15 @@
 set term png size 2048, 2048
-set out 'libsodium.png'
+set out 'alligment.png'
 set title "`head -1 result.txt`"
 set view map
 set logscale x 2
-set logscale y 2
+#set logscale y 2
 set grid
 set xtics ('8B' 8, '16B' 16,'32B' 32,'64B' 64,'128B' 128,'256B' 256,'512B' 512,'1kiB' 1024,'2kiB' 2048,'4kiB' 4096,'8kiB' 8192,'16kiB' 16384,'32kiB' 32768,'64kiB' 65536,'128kiB' 131072,'256kiB' 262144,'512kiB' 524288,'1MiB' 1048576,'2MiB' 2097152,'4MiB' 4194304,'8MiB' 8388608,'16MiB' 16777216 )
-set ytics ('8B' 8, '16B' 16,'32B' 32,'64B' 64,'128B' 128,'256B' 256,'512B' 512,'1kiB' 1024,'2kiB' 2048,'4kiB' 4096,'8kiB' 8192,'16kiB' 16384,'32kiB' 32768,'64kiB' 65536,'128kiB' 131072,'256kiB' 262144,'512kiB' 524288,'1MiB' 1048576,'2MiB' 2097152,'4MiB' 4194304,'8MiB' 8388608,'16MiB' 16777216 )
-set xlabel 'Size of all data to process (e.g. weld)'
-set xrange [16:]
-set yrange [8:]
-set ylabel 'Size of chunk to process at a time (e.g. bag)'
-set palette defined(0.0 "#000000", 0.1 "#000000", 0.15 "#008888", 0.2 "#00ffff", 0.3 "#0000ff", 0.4 "red", 0.5 "yellow", 0.6 "#008800", 0.8 "#00ff00", 0.9 "#88ff88", 1.0 "#aaffaa")
+#set ytics ('8B' 8, '16B' 16,'32B' 32,'64B' 64,'128B' 128,'256B' 256,'512B' 512,'1kiB' 1024,'2kiB' 2048,'4kiB' 4096,'8kiB' 8192,'16kiB' 16384,'32kiB' 32768,'64kiB' 65536,'128kiB' 131072,'256kiB' 262144,'512kiB' 524288,'1MiB' 1048576,'2MiB' 2097152,'4MiB' 4194304,'8MiB' 8388608,'16MiB' 16777216 )
+set ylabel 'alligment'
+#set xrange [16:]
+#set yrange [8:]
+set xlabel 'Buffer size'
+set palette defined(0.0 "#ffffff", 0.1 "#000000", 0.15 "#008888", 0.2 "#00ffff", 0.3 "#0000ff", 0.4 "red", 0.5 "yellow", 0.6 "#008800", 0.8 "#00ff00", 0.9 "#88ff88", 1.0 "#aaffaa")
 splot 'result.txt' u 1:2:3 w pm3d title "Crypto speed in Mb/s"
