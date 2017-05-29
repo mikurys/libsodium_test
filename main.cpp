@@ -3,7 +3,8 @@
 #include <chrono>
 #include <cmath>
 
-constexpr size_t SIZE = 32*1024*1024;
+//constexpr size_t SIZE = 32*1024*1024;
+constexpr size_t SIZE = 64*1024;
 constexpr size_t ciphertext_len = crypto_secretbox_MACBYTES * SIZE + SIZE;
 
 typedef std::chrono::steady_clock Time;
@@ -102,7 +103,7 @@ int main(int argc, char **argv)
 			//ms m = std::chrono::duration_cast<ms>(time);
 			ns n = std::chrono::duration_cast<ns>(time);
 			//std::cout << "Buffer size: " << size << " crypto_secretbox_easy time in ns: " << m.count()	<< std::endl;
-			std::cout << size << " " << sizeB << " " << (static_cast<double>(size)*1000*1000*1000)/(static_cast<double>(n.count())*1024*1024)*8*iter	<< std::endl;
+			std::cout << size << " " << sizeB << " " << (static_cast<double>(true_size)*1000*1000*1000)/(static_cast<double>(n.count())*1024*1024)*8*iter	<< std::endl;
 
 			//std::cerr << std::endl << "iter=" << iter << " size=" << size << " SIZE=" << SIZE << " n.count=" << n.count() << std::endl;
 			dbl_sizeB*=multipler;

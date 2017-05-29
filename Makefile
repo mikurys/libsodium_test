@@ -1,6 +1,6 @@
-PROGRAM_OPTION=--encrypt-auth #posibilities: --auth, --encrypt-auth
-MIN_SIZE=1024 #minimum data to calculate avg crypto speed, default value 1024 (increase to get better data)
-QUALITY=16 #chart quality, default value 4 (increase to get better chart)
+PROGRAM_OPTION=--auth #posibilities: --auth, --encrypt-auth
+MIN_SIZE=64024 #minimum data to calculate avg crypto speed, default value 1024 (increase to get better data)
+QUALITY=128 #chart quality, default value 4 (increase to get better chart)
 all:
 	g++ -std=c++14 -lsodium -o libsodium_test main.cpp
 run:
